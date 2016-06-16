@@ -34,21 +34,14 @@ module Sinatra
         end
       end
 
-      app.configure :staging, :production do
-        Sprockets::Helpers.configure do |config|
-          config.manifest = Sprockets::Manifest.new(app.sprockets, app.assets_path)
-          config.prefix = app.path_prefix unless app.path_prefix.nil?
-        end
-      end
-
-      app.configure :staging, :production do
+      app.configure :staging, :production, :assets do
         app.sprockets.css_compressor = app.assets_css_compressor unless app.assets_css_compressor.nil?
         app.sprockets.js_compressor = app.assets_js_compressor unless app.assets_js_compressor.nil?
 
         Sprockets::Helpers.configure do |config|
+          config.manifest = Sprockets::Manifest.new(app.sprockets, app.assets_path)
           config.protocol = app.assets_protocol
           config.asset_host = app.assets_host unless app.assets_host.nil?
-          config.prefix = app.path_prefix unless app.path_prefix.nil?
         end
       end
 
